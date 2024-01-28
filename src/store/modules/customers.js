@@ -19,6 +19,12 @@ const customers = {
         },
         setAddCustomers(state, payload) {
             state.customers.push(payload)
+        },
+        setDeleteCustomer(state, payload) {
+            const index = state.customers.findIndex(customer => customer._id == payload)
+            if(index != -1){
+                state.customers.splice(index, 1)
+            }
         }
     },
     actions:{
@@ -48,6 +54,13 @@ const customers = {
             axios.post(`${context.getters.getUrl}/api/customers/${payload._id}`, payload)
             .then(res => {
                 console.log(res.data);
+            })
+        },
+        apiDeleteCustomer(context, payload) {
+            axios.get(`${context.getters.getUrl}/api/customers/${payload}`)
+            .then(res => {
+                console.log(res);
+                context.commit('setDeleteCustomer', payload)
             })
         }
     }

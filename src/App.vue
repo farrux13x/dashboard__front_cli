@@ -91,7 +91,7 @@
                 </template>
                 <template #default="scope">
                     <el-button type="primary" size="small" @click="updataCustomer(scope.row)">Edit</el-button>
-                    <el-button type="danger" size="small">Detail</el-button>
+                    <el-button type="danger" size="small" @click="deleteCustomer(scope.row._id)">Detail</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
     data(){
@@ -120,9 +120,13 @@ export default {
         }
     },
     methods:{
+        ...mapMutations([
+            'setDeleteCustomer'
+        ]),
         ...mapActions([
             'apiCustomers',
             'apiAddCustomer',
+            'apiDeleteCustomer',
             'apiUpdataCustomers',
             'apiSearchCustomers'
         ]),
@@ -140,16 +144,18 @@ export default {
 
             this.modalToggle = true
         },
-        updataCustomer(id) {
-            console.log(id);
+        updataCustomer(customer) {
             this.modalToggle = true
             this.modalBtnChange = true
-            this.customerData = id
+            this.customerData = JSON.parse(JSON.stringify(customer))
         },
         updataCustomera() {
             this.modalToggle = false
-            // console.log(this.customerData);
+            
             this.apiUpdataCustomers(this.customerData)
+        },
+        deleteCustomer(id){
+            this.apiDeleteCustomer(id)
         }
     },
     computed:{
